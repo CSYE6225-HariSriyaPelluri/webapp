@@ -27,4 +27,11 @@ const authenticate = async(req,res,next)=>{
 
 }
 
-module.exports=authenticate
+const authNotValid =async(req,res,next)=>{
+    if(req.headers['authorization']){
+        return res.status(400).json().send();
+    }
+    next();
+}
+
+module.exports={authenticate, authNotValid}

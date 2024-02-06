@@ -8,4 +8,14 @@ function checkMethodType(req,res,next){
     }
 };
 
-module.exports=checkMethodType
+function checkUserMethod(req, res, next){
+    if(["GET", "POST", "PUT"].includes(req.method)){
+        next();
+    }
+    else{
+        return res.status(405).json().send();
+    }
+    
+}
+
+module.exports={checkMethodType, checkUserMethod}

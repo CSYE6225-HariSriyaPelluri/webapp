@@ -27,20 +27,10 @@ const User = sequelize.define('User', {
         validate: {
             isEmail: true,
         }
-    },
-    account_created: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false
-    },
-    account_updated: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false
     }
 }, {
-    createdAt: "account_created",
-    updatedAt: "account_updated",
+    createdAt: 'account_created',
+    updatedAt: 'account_updated',
     indexes: [{
         fields: ['username', 'id'],
         unique: true,

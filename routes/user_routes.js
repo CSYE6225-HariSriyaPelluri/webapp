@@ -1,4 +1,4 @@
-const authenticate = require('../middleware/checkAuth')
+const {authenticate, authNotValid} = require('../middleware/checkAuth')
 const express = require('express');
 const router = express.Router();
 const {getUserDetails, addUser, updateUser}=require('../controllers/user_controllers');
@@ -9,6 +9,6 @@ router.get('/self', checkBody, authenticate, getUserDetails)
 
 router.put('/self', updateUserValidation, authenticate, updateUser)
 
-router.post('/', addUserValidation, addUser)
+router.post('/', authNotValid, addUserValidation, addUser)
 
 module.exports = router
