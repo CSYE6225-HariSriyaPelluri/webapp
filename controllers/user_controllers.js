@@ -44,12 +44,14 @@ const addUser = async(req, res) =>{
             return res.status(409).json().send();
         }
         const generatedPassword = await passwordGenerator(password)
+        
         const user = await User.create({
             ...req.body,
             password: generatedPassword,
         });
-        return res.status(201).json().send(user);
+        return res.status(201).json(user).send();
     } catch (error) {
+        console.log(error)
         return res.status(400).json().send();
     }
 

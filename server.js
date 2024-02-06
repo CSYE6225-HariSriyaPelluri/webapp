@@ -4,7 +4,7 @@ const dotenv= require('dotenv');
 dotenv.config()
 const port = process.env.PORT || 3000;
 
-sequelize.sync().then(() => {
+sequelize.sync({alter: true}).then(() => {
     console.log('Database synced!');
   
     app.listen(port, async() => {
