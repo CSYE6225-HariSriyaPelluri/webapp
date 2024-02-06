@@ -1,7 +1,7 @@
 function checkMethodType(req,res,next){
     
     if(req.method!="GET"){
-        res.status(405).json().send();
+        return res.status(405).json().send();
     }
     else{
         next();

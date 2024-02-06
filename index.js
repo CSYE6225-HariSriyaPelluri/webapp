@@ -1,12 +1,7 @@
 const express = require('express');
 const app = express();
-const dotenv= require('dotenv');
 const bodyParser = require('body-parser');
-const routes = require('./routes/index');
-const checkMethodType = require('./middleware/checkMethod');
-const checkBody = require('./middleware/checkBody');
-dotenv.config()
-
+const routePaths = require('./routes/index');
 
 app.use(bodyParser.json());
 
@@ -19,8 +14,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.all('/healthz',[checkMethodType, checkBody]);
-app.use('/', routes)
+routePaths(app)
 
 
 module.exports=app
