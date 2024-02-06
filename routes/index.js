@@ -1,19 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const sequelize = require('../models/index')
+const checkMethodType = require('../middleware/checkMethod');
+const checkBody = require('../middleware/checkBody');
+const healthzRoute = require('./healthz')
+const userRoutes = require('./user_routes');
+const checkParams = require('../middleware/checkParams');
 
-router.get('/healthz',(req, res) => {
-      try{
-      sequelize.authenticate().then(() => {
-        console.log('Database connected.')
-        return res.status(200).json().send();
-      })
-      .catch((err)=> {
-        return res.status(503).json().send();
-      })
-    } catch(err){
-      console.log(err);
-    }
-});
+function routePaths(app){
+  app.use(checkParams)
+  app.use('/healthz', checkMethodType, checkBody, healthzRoute)
+  app.use('/v1/user',userRoutes)
+  app.use((req,res)=>{
+    return res.status(404).json().send();
+  })
 
-module.exports = router;
+}
+
+module.exports = routePaths;

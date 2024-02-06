@@ -1,6 +1,16 @@
 const app = require('./index');
+const sequelize = require('./models/index')
+dotenv.config()
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+
+sequelize.sync().then(() => {
+    console.log('Database synced!');
+  
+    app.listen(port, async() => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
+  }).catch((error) => {
+    console.error('Unable to sync database:', error);
+    return error
   });
   
