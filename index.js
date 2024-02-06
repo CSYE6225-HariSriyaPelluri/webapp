@@ -6,7 +6,7 @@ const routes = require('./routes/index');
 const checkMethodType = require('./middleware/checkMethod');
 const checkBody = require('./middleware/checkBody');
 dotenv.config()
-const port = process.env.PORT || 3000;
+
 
 app.use(bodyParser.json());
 
@@ -22,9 +22,5 @@ app.use((req, res, next) => {
 app.all('/healthz',[checkMethodType, checkBody]);
 app.use('/', routes)
 
-
-app.listen(port, async() => {
-  console.log(`Server running at http://localhost:${port}`);
-});
 
 module.exports=app
