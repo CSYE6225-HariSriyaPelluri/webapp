@@ -1,20 +1,38 @@
 // Reference: https://jestjs.io/docs/mock-function-api#mockfnmockimplementationfn
-jest.mock('../models/index', () => {
-    const sequilizeMock={};
-    sequilizeMock.authenticate= jest.fn()
- 
-    return  sequilizeMock;
-})
 
 const request = require("supertest")
 const app = require('../index')
 const sequelize = require('../models/index');
 
+jest.mock('../models/index', () => {
+    const Sequelize = require("sequelize-mock");
+    const sequelizeMock = new Sequelize();
+    sequelizeMock.sync = jest.fn();
+    sequelizeMock.authenticate = jest.fn();
+    sequelizeMock.sync.mockImplementation(()=> {return Promise.resolve()})
+
+    return sequelizeMock; 
+});
+
+
+jest.mock('../models/User', () => () => {
+  const Sequelize = require("sequelize-mock");
+  const dbMock = new Sequelize();
+  return dbMock.define('User',  {
+    id: 2,
+    first_name: 'good',
+    last_name: 'day',
+    password: "2019-01-01 13:30:31",
+    username: 'dummy'
+  })
+});
 
 describe("health check for /healthz", () => {
-
+    
     beforeEach(async () => {
+        
         sequelize.authenticate.mockImplementation(()=>{return Promise.resolve()});
+        
       })
     
     it("should pass when database is connected", async () => {
