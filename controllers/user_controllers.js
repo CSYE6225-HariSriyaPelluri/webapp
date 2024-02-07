@@ -27,12 +27,13 @@ const updateUser = async(req,res) =>{
         });
         if (updated) {
 
-            return res.status(204).json().send();
-        } else {
-            return res.status(404).json().send();
+            return res.status(204).json().end();
+        } else if(!updated) {
+            res.status(404).json().send();
         }
     } catch (error) {
-        return res.status(400).json().send();
+
+        res.status(400).json().send();
     }
 
 }

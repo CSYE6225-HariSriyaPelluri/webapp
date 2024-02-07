@@ -35,11 +35,7 @@ const User = sequelize.define('User', {
     }
 }, {
     createdAt: 'account_created',
-    updatedAt: 'account_updated',
-    indexes: [{
-        fields: ['username', 'id'],
-        unique: true,
-    }]
+    updatedAt: 'account_updated'
 });
 
 module.exports = User;
