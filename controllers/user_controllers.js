@@ -5,12 +5,14 @@ const getUserDetails = async(req, res)=>{
     try {
         
         if (req.user) {
-            return res.status(200).send(req.user);
+            const result = req.user.toJSON();
+            delete result.password;
+            return res.status(200).json(result).send();
         } else {
-            return res.status(404).send('User not found');
+            return res.status(404).json().send();
         }
     } catch (error) {
-        return res.status(400).send(error.message);
+        return res.status(400).json().send();
     }
 }
 
@@ -24,13 +26,13 @@ const updateUser = async(req,res) =>{
             where: { id: req.user.id }
         });
         if (updated) {
-            const updatedUser = await User.findByPk(req.user.id);
-            res.status(204).json().send();
+
+            return res.status(204).json().send();
         } else {
-            res.status(404).json().send();
+            return res.status(404).json().send();
         }
     } catch (error) {
-        res.status(400).json().send();
+        return res.status(400).json().send();
     }
 
 }
@@ -49,9 +51,13 @@ const addUser = async(req, res) =>{
             ...req.body,
             password: generatedPassword,
         });
-        return res.status(201).json(user).send();
+
+        const result = user.toJSON();
+        delete result.password;
+
+        return res.status(201).json(result).send();
     } catch (error) {
-        console.log(error)
+
         return res.status(400).json().send();
     }
 

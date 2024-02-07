@@ -1,3 +1,8 @@
+/**
+ * Reference docs: 
+ * https://sequelize.org/docs/v6/core-concepts/model-basics/
+ * https://stackoverflow.com/questions/14653913/rename-node-js-sequelize-timestamp-columns
+ */
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
