@@ -1,10 +1,13 @@
 const app = require('./index');
-const sequelize = require('./models/index');
 const dotenv= require('dotenv');
 dotenv.config()
 const port = process.env.PORT || 3000;
+const createDb = require('./config/createDb')
 
-sequelize.sync({alter: true}).then(() => {
+createDb().then(()=>{
+  
+  const sequelize = require('./models/index');
+  sequelize.sync({alter: true}).then(() => {
     console.log('Database synced!');
   
     app.listen(port, async() => {
@@ -14,4 +17,10 @@ sequelize.sync({alter: true}).then(() => {
     console.error('Unable to sync database:', error);
     return error
   });
+})
+.catch((err)=>{
+  console.log(err);
+  process.exit(1);
+})
+
   

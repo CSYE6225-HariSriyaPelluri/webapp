@@ -17,13 +17,13 @@ jest.mock('../models/index', () => {
 
 jest.mock('../models/User', () => () => {
   const Sequelize = require("sequelize-mock");
-  const dbMock = new Sequelize();
-  return dbMock.define('User',  {
-    id: 2,
-    first_name: 'good',
-    last_name: 'day',
-    password: "2019-01-01 13:30:31",
-    username: 'dummy'
+  const sequelizeMock = new Sequelize();
+  return sequelizeMock.define('User',  {
+    id: 1,
+    first_name: 'John',
+    last_name: 'Smith',
+    password: "VerySecurePassword!",
+    username: 'testuser@gmail.com'
   })
 });
 
