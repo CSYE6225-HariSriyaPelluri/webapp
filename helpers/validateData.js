@@ -8,6 +8,11 @@ addUserValidation = [
     body('last_name').notEmpty().withMessage('Last name is required'),
     body('password').notEmpty().withMessage('Password must not be empty'),
     body('username').notEmpty().isEmail().withMessage('Username must be a valid email address'),
+    body().custom(body => {
+        const keys = Object.keys(body);
+        const allowedKeys = ['first_name', 'last_name', 'password', 'username'];
+        return keys.every(key => allowedKeys.includes(key));
+    }).withMessage('Attempt to add invalid fields.'),
     (req,res,next)=>{
         const result = validationResult(req);
         if (!result.isEmpty()) {

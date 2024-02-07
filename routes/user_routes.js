@@ -1,4 +1,4 @@
-const {authenticate, authNotValid} = require('../middleware/checkAuth')
+const {authenticate, authNotValid} = require('../middleware/checkAuth');
 const express = require('express');
 const router = express.Router();
 const {getUserDetails, addUser, updateUser}=require('../controllers/user_controllers');
@@ -10,5 +10,13 @@ router.get('/self', checkBody, authenticate, getUserDetails)
 router.put('/self', updateUserValidation, authenticate, updateUser)
 
 router.post('/', authNotValid, addUserValidation, addUser)
+
+router.all('/self', (req, res) => {
+    return res.status(405).send('Method Not Allowed');
+});
+
+router.all('/', (req, res) => {
+    return res.status(405).send('Method Not Allowed');
+});
 
 module.exports = router
