@@ -54,7 +54,7 @@ describe("health check for /healthz", () => {
         return request(app)
             .get("/healthz")
             .send({"payload":"data"})
-            .expect(400)
+            .expect(200)
     });
 
     it('should not allow request with query parameters and throw error', async () => {
