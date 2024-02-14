@@ -26,11 +26,14 @@ jobs:
 
     - name: Install Dependencies
       run: npm install
+    
+    - name: Wait for Databases to be ready
+      run: sleep 10
 
     - name: Run Integration Tests
       run: npm run test:integration
       env:
-        MYSQL_HOST: localhost
+        MYSQL_HOST: mysql
         MYSQL_USER: root
         MYSQL_PASSWORD: rootpassword
         MYSQL_DB: testdb
