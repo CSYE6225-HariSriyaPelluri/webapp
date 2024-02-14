@@ -1,39 +1,44 @@
 name: Integration testing
+
 on: [pull_request]
+
 jobs:
   run-integration-tests:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: testdb
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-    - name: Install Dependencies
-      run: npm install
-    
-    - name: Wait for Databases to be ready
-      run: sleep 10
+      - name: Install MySQL
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_USER: root
+          MYSQL_PASSWORD: rootpassword
+          MYSQL_DB: testdb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-server
+          sudo systemctl start mysql
+          sudo mysql -e "CREATE USER 'root'@'%' IDENTIFIED BY 'rootpassword';"
+          sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';"
+          sudo mysql -e "FLUSH PRIVILEGES;"
+          mysql -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB;" -u$MYSQL_USER -p$MYSQL_PASSWORD
 
-    - name: Run Integration Tests
-      run: npm run test:integration
-      env:
-        MYSQL_HOST: mysql
-        MYSQL_USER: root
-        MYSQL_PASSWORD: rootpassword
-        MYSQL_DB: testdb
+      - name: Configure MySQL Service
+        run: |
+          sudo systemctl enable mysql
+          sudo systemctl status mysql
+          # Wait for MySQL to fully start
+          sleep 10
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Integration Tests
+        run: npm run test:integration
