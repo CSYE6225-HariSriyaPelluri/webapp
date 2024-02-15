@@ -19,12 +19,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-server
+          sudo /etc/init.d/mysql start
           sudo systemctl enable mysql
           sudo systemctl status mysql
 
       - name: Configure MySQL
         run: |
-          sudo /etc/init.d/mysql start
           sudo mysql --user=root --password=rootpassword --execute="CREATE DATABASE IF NOT EXISTS testdb;"
 
       - name: Install Dependencies
