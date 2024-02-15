@@ -176,6 +176,13 @@ After connecting to your droplet via SSH, execute the following commands:
 
 - Access your application through a tool like `curl` or `Postman` to make requests to your application's endpoints, such as the `healthz` endpoint, to verify it is running correctly.
 
+## Step 6: Integration Testing
+
+Use below command to run integration tests:
+```bash
+npm run test:integration
+```
+
 ## Additional Notes
 
 - **Environment Variables**: Make sure to configure your production environment variables appropriately on the droplet.
