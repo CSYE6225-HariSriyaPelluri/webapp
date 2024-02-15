@@ -11,9 +11,10 @@ describe('/v1/user Integration Tests', () => {
     };
     let basicAuthHeader;
 
-    beforeAll(() => {
+    beforeAll( async() => {
         const userCredentials = Buffer.from(`${testUser.username}:${testUser.password}`).toString('base64');
         basicAuthHeader = `Basic ${userCredentials}`;
+        await sequelize.sync({force: true})
     });
   
     it('Test 1 - Create an account and validate it exists', async () => {
