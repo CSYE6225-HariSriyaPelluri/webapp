@@ -1,0 +1,39 @@
+name: Integration testing
+
+on: [pull_request]
+
+jobs:
+  run-integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-server
+          sudo /etc/init.d/mysql start
+          sudo systemctl enable mysql
+          sudo systemctl status mysql
+
+      - name: Configure MySQL
+        run: |
+          sudo mysql --user=root --password=root --execute="CREATE DATABASE IF NOT EXISTS testdb;"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Integration Tests
+        run: npm run test:integration
+        env:
+          HOST: '127.0.0.1'
+          USER: root
+          PASSWORD: root
+          DATABASE: testdb
