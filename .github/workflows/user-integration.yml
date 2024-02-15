@@ -29,11 +29,11 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Run Integration Tests
-        run: npm run test:integration
         env:
           HOST: ${{ secrets.HOST }}
           USER: ${{ secrets.DB_USER }}
           PASSWORD: ${{ secrets.DB_PASSWORD }}
           DATABASE: ${{ secrets.DATABASE }}
+
+      - name: Run Integration Tests
+        run: npm run test:integration
