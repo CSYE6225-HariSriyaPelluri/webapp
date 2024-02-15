@@ -33,7 +33,7 @@ jobs:
       - name: Run Integration Tests
         run: npm run test:integration
         env:
-          MYSQL_HOST: '127.0.0.1'
-          MYSQL_USER: root
-          MYSQL_PASSWORD: root
-          MYSQL_DB: testdb
+          HOST: '127.0.0.1'
+          USER: root
+          PASSWORD: root
+          DATABASE: testdb
