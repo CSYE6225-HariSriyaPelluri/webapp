@@ -25,7 +25,7 @@ jobs:
 
       - name: Configure MySQL
         run: |
-          sudo mysql --user=root --password=root --execute="CREATE DATABASE IF NOT EXISTS testdb;"
+          sudo mysql --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --execute="CREATE DATABASE IF NOT EXISTS testdb;"
 
       - name: Install Dependencies
         run: npm install
@@ -33,7 +33,7 @@ jobs:
       - name: Run Integration Tests
         run: npm run test:integration
         env:
-          HOST: '127.0.0.1'
-          USER: root
-          PASSWORD: root
-          DATABASE: testdb
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.DB_USER }}
+          PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DATABASE: ${{ secrets.DATABASE }}
