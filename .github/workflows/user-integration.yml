@@ -5,7 +5,11 @@ on: [pull_request]
 jobs:
   run-integration-tests:
     runs-on: ubuntu-latest
-
+    env:
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.DB_USER }}
+          PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DATABASE: ${{ secrets.DATABASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,11 +33,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        env:
-          HOST: ${{ secrets.HOST }}
-          USER: ${{ secrets.DB_USER }}
-          PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DATABASE: ${{ secrets.DATABASE }}
 
       - name: Run Integration Tests
         run: npm run test:integration
