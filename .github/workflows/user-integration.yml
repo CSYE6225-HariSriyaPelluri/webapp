@@ -22,6 +22,10 @@ jobs:
           sudo systemctl enable mysql
           sudo systemctl start mysql
           sudo systemctl status mysql
+          sudo mysql --execute="
+          CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'rootpassword';
+          GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+          FLUSH PRIVILEGES;"
 
       - name: Configure MySQL
         run: |
