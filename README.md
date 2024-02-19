@@ -11,7 +11,7 @@ Before you start, ensure you have the following tools installed on your local de
 - **npm**: For managing Node.js packages.
 - **MySQL**: For database management
 
-## Setting Up for Local Development
+## Setting Up for Local Development Environment
 
 1. **Clone the Repository**: Since the initial `webapp` repository is empty, start by forking the repository into your own GitHub namespace.
 
