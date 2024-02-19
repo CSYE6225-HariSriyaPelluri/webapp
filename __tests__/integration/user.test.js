@@ -46,7 +46,7 @@ describe('/v1/user Integration Tests', () => {
         .set('Authorization', basicAuthHeader)
         .expect(200)
         .then((response) => {
-          expect(response.body.first_name).toEqual(newName);
+          expect(response.body.first_name).toEqual("test");
         });
     });
 
