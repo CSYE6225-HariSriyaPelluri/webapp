@@ -63,9 +63,8 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
-      - name: Packer image creation
+      - name: Install Packer
         uses: hashicorp/setup-packer@main
-        with:
-          version: '3.0.0'
-          run: |
-            packer build -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "zone=${{ secrets.ZONE }}" packer
+
+      - name: Build image
+        run: packer build -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "zone=${{ secrets.ZONE }}" packer
