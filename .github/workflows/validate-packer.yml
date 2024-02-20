@@ -1,0 +1,29 @@
+name: Packer Template Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate: 
+    name: Validate Packer code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Packer
+        uses: hashicorp/setup-packer@main
+        with:
+          version: '3.0.0'
+
+      - name: Initialize Packer
+        run: packer init packer
+        
+      - name: Packer fmt
+        run: packer fmt packer
+
+      - name: Packer validate
+        run: packer validate -var "project_id=${{ secrets.GCP_PROJECT_ID}}" -var "${{ secrets.ZONE}}" packer
