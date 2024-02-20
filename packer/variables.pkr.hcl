@@ -6,13 +6,31 @@ variable "project_id" {
 variable "image_name" {
   type        = string
   description = "The name of the created machine image"
-  default     = "node-centos-image"
+  default     = "centos-image"
 }
 
 variable "zone" {
   type        = string
   description = "The zone where the GCP resources will be created"
   default     = "us-central1-a"
+}
+
+variable ssh_user {
+  type        = string
+  description = "Name of the ssh user"
+  default     = "packer"
+}
+
+variable source_image {
+  type        = string
+  description = "Source of image being created"
+  default     = "centos-stream-8-v20230509"
+}
+
+variable image_family {
+  type        = string
+  description = "Image Family of the image being created"
+  default     = "centos-8"
 }
 
 variable "sql_user" {

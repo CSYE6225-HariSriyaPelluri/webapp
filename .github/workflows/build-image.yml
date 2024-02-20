@@ -1,10 +1,7 @@
 name: Build and Deploy
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  pull_request:
+  push:
     branches:
       - main
 
@@ -18,6 +15,8 @@ jobs:
         DATABASE: ${{ secrets.DATABASE }}
         PKR_VAR_sql_user: ${{ secrets.DB_USER }}
         PKR_VAR_sql_password: ${{ secrets.DB_PASSWORD }}
+        PORT: ${{ secrets.PORT}}
+
 
     steps:
       - name: Checkout code
@@ -35,6 +34,7 @@ jobs:
           echo "USER_NAME=${{ secrets.DB_USER }}" >> .env
           echo "PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DATABASE=${{ secrets.DATABASE }}" >> .env
+          echo "PORT: ${{ secrets.PORT}}" >> .env
       
       - name: Build application artifact
         run: zip -r webapp.zip ./
