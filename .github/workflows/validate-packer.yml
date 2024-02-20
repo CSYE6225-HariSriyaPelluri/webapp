@@ -9,13 +9,41 @@ jobs:
   validate: 
     name: Validate Packer code
     runs-on: ubuntu-latest
+    env:
+        HOST: ${{ secrets.HOST }}
+        USER_NAME: ${{ secrets.DB_USER }}
+        PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DATABASE: ${{ secrets.DATABASE }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      
       - name: Build application artifact
         run: zip -r webapp.zip ./
+
+      - name: Install MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-server
+          sudo /etc/init.d/mysql start
+          sudo systemctl enable mysql
+          sudo systemctl status mysql
+
+      - name: Configure MySQL
+        run: |
+          sudo mysql --user=${{ secrets.DB_USER }} --password=${{ secrets.DB_PASSWORD }} --execute="CREATE DATABASE IF NOT EXISTS ${{ secrets.DATABASE }};"
+      
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Integration Tests
+        run: npm run test:integration
 
       - name: Install Packer
         uses: hashicorp/setup-packer@main
@@ -27,4 +55,4 @@ jobs:
         run: packer fmt packer
 
       - name: Packer validate
-        run: packer validate -var "project_id=${{ secrets.GCP_PROJECT_ID}}" -var "zone=${{ secrets.ZONE}}" packer
+        run: packer validate -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "zone=${{ secrets.ZONE }}" packer
