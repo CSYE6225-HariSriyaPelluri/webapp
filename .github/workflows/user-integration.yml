@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
           HOST: ${{ secrets.HOST }}
-          USER: ${{ secrets.DB_USER }}
+          USER_NAME: ${{ secrets.DB_USER }}
           PASSWORD: ${{ secrets.DB_PASSWORD }}
           DATABASE: ${{ secrets.DATABASE }}
     steps:
