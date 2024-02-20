@@ -61,7 +61,7 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/auth@v2
         with:
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
       - name: Packer image creation
         uses: hashicorp/setup-packer@main
