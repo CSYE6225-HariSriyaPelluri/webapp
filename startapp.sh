@@ -27,7 +27,7 @@ sudo npm install --prefix /home/csye6225/webapp/webapp_develop/
 sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
 
 # Show ownership of the artifacts
-ls -al /home/csye6225/webapp/webapp_develop/
+sudo ls -al /home/csye6225/webapp/webapp_develop/
 
 # Start MySQL service
 sudo systemctl start mysqld
