@@ -6,10 +6,7 @@ set -e
 sudo useradd -s /usr/sbin/nologin csye6225
 
 # Update package repositories
-#sudo dnf update -y
-
-# Install the required dependencies
-#sudo dnf install -y curl
+sudo dnf update -y
 
 # Add the NodeSource repository for Node.js 18
 curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
