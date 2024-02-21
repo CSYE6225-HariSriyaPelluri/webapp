@@ -54,5 +54,13 @@ jobs:
       - name: Packer fmt
         run: packer fmt packer
 
+      - name: Check if fmt command returns any error
+        run: |
+          if [[ $? -eq 0 ]]; then
+            echo "Packer format command succeeded."
+          else
+            echo "Packer format command failed."
+            exit 1
+          fi
       - name: Packer validate
         run: packer validate -var "project_id=${{ secrets.GCP_PROJECT_ID }}" -var "zone=${{ secrets.ZONE }}" packer
