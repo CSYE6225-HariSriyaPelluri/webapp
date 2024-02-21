@@ -188,18 +188,21 @@ npm run test:integration
 - **Environment Variables**: Make sure to configure your production environment variables appropriately on the droplet.
 - **Database Setup**: Configure your RDBMS with the required databases and permissions.
 
-## Assignment 3: Packer & Custom Images
+## Assignment 4: Packer & Custom Images
 
 ### Building Custom Application Images using Packer
 
 For this assignment, we are using Packer to create custom images with the following specifications:
 
-- Source Image: Centos Stream 8
+- Source Image: Centos Stream 8 (latest)
 - Custom images are set to be private, only launchable by authorized users.
 - Custom image builds occur in our DEV GCP project.
 - Builds are configured to run in the default VPC.
-- The custom image includes everything needed to run our application, including dependencies like MySQL/MariaDB/PostgreSQL installed locally.
+- The custom image includes everything needed to run our application, including dependencies like MySQL installed locally.
 - The Packer template is stored in the same repository as the web application code.
+- To format and test Packer locally, run packer fmt packer.
+- To validate: `packer validate -var 'project_id=<project_id>' -var 'zone=<zone>' packer` (Remember to add zip file locally to test for this and below step)
+- To build locally for testing: `packer build -var 'project_id=<project_id>' -var 'zone=<zone>' packer`
 
 ## GitHub Actions Workflows
 
@@ -222,8 +225,8 @@ When a pull request is merged, this GitHub Actions workflow executes the followi
   - Creates a local user `csye6225` with primary group `csye6225`. The user does not have a login shell.
   - Installs application dependencies and sets up the application by copying the artifacts and configuration files.
   - Ensures that application artifacts and configurations are owned by user `csye6225` and group `csye6225`.
-  - Adds a systemd service file to `/etc/systemd/system` and configures it to start the service when an instance is launched.
-  - Reloads systemd with `systemctl daemon-reload` and enables the service with `systemctl enable <service_name>`.
+  - Adds a systemd service file(runappdefault.service) to `/etc/systemd/system` and configures it to start the service when an instance is launched.
+  - Reloads systemd with `systemctl daemon-reload` and enables the service with `systemctl enable runappdefault`.
 
 No custom image is built if any of the jobs or steps in the workflow fail.
 
