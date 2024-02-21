@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Create a local user
+set -e
 
 sudo useradd -s /usr/sbin/nologin csye6225
 
