@@ -1,7 +1,7 @@
-variable "project_id" {
-  type        = string
-  description = "GCP Project ID"
-}
+#variable "project_id" {
+#  type        = string
+#  description = "GCP Project ID"
+#}
 
 variable "image_name" {
   type        = string
