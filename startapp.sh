@@ -12,7 +12,7 @@ sudo dnf update -y
 curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
 
 # Install Node.js and npm
-sudo dnf install -y nodejs mysql-server unzip
+sudo dnf install -y nodejs unzip
 
 # Verify installation
 node --version
@@ -28,20 +28,6 @@ sudo chown -R csye6225:csye6225 /home/csye6225/webapp/
 
 # Show ownership of the artifacts
 sudo ls -al /home/csye6225/webapp/webapp_develop/
-
-# Start MySQL service
-sudo systemctl start mysqld
-
-# Wait for MySQL service to become available
-until sudo mysqladmin ping &>/dev/null; do
-    echo "Waiting for MySQL to start..."
-    sleep 1
-done
-
-# Set MySQL root password
-sudo mysql -e "ALTER USER '$SQL_USER'@'localhost' IDENTIFIED WITH mysql_native_password BY '$SQL_PASSWORD'; FLUSH PRIVILEGES;"
-
-sudo systemctl enable mysqld
 
 # Create systemd service file
 sudo cp /home/csye6225/webapp/webapp_develop/runappdefault.service /etc/systemd/system/runappdefault.service
