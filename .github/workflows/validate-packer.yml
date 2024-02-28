@@ -52,7 +52,7 @@ jobs:
         run: packer init packer
         
       - name: Packer fmt
-        run: packer fmt packer
+        run: packer fmt -check packer
 
       - name: Check if fmt command returns any error
         run: |
