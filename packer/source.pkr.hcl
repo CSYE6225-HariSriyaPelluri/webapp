@@ -11,6 +11,7 @@ source "googlecompute" "image" {
   project_id          = var.project_id
   image_name          = "${var.image_name}-${formatdate("YYYY-MM-DD-hh-mm-ss", timestamp())}"
   zone                = var.zone
+  machine_type        = "e2-medium"
   source_image_family = var.source_image_family
   image_family        = var.image_family
   ssh_username        = var.ssh_user
