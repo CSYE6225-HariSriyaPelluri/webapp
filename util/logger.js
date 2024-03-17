@@ -1,4 +1,5 @@
 const winston = require('winston');
+const logFilePath = process.env.NODE_ENV === 'test' ? './webapp.log' : '/var/log/webapp/webapp.log';
 const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
@@ -7,7 +8,7 @@ const logger = winston.createLogger({
   transports: [
     //new winston.transports.Console({ level: 'error' }),
     // new line
-    new winston.transports.File({ filename: '/var/log/webapp/webapp.log', level: 'info'}),
+    new winston.transports.File({ filename: logFilePath, level: 'info'}),
       ]
 });
 
