@@ -4,11 +4,20 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json(),
+    winston.format((info, opts) => {
+      // let level = info.level.toUpperCase();
+      //   if(level === 'VERBOSE') {
+      //     level = 'DEBUG';
+      //   }
+
+      //   info['severity'] = level;
+        delete info["level"];
+        return info;
+    })(),
   ),
   transports: [
-    //new winston.transports.Console({ level: 'error' }),
-    // new line
-    new winston.transports.File({ filename: logFilePath, level: 'info'}),
+    new winston.transports.Console({ level: 'error' }),
+    new winston.transports.File({ filename: logFilePath}),
       ]
 });
 
@@ -16,7 +25,4 @@ logger.on('error', (err) => {
   console.error('Winston encountered an error:', err);
 });
 
-
-// Test logging
-logger.info('Test log message');
 module.exports=logger
