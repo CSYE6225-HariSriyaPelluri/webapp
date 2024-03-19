@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const routePaths = require('./routes/index');
+const loggingMiddleware = require('./middleware/loggerMiddleware')
 
 app.use(bodyParser.json());
+app.use(loggingMiddleware)
 
 app.use((req, res, next) => {
 
