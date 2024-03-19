@@ -41,11 +41,16 @@ LOGGING_CONFIG="logging:
       type: parse_json
       time_key: timestamp
       time_format: '%Y-%m-%dT%H:%M:%S.%L%z'
+    move_severity:
+      type: modify_fields
+      fields:
+        severity:
+          move_from: jsonPayload.severity
   service:
     pipelines:
       default_pipeline:
         receivers: [my-webapp-receiver]
-        processors: [my-webapp-processor]"
+        processors: [my-webapp-processor, move_severity]"
 
 # Add the logging configuration to the Ops Agent configuration file
 echo "$LOGGING_CONFIG" | sudo tee -a /etc/google-cloud-ops-agent/config.yaml > /dev/null
