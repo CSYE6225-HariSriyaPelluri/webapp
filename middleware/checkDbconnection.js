@@ -8,6 +8,7 @@ function checkDbconnection(req,res,next){
         return res.status(200).json().send();
       })
       .catch((err)=> {
+        logger.error("Database connection Failed")
         return res.status(503).json().send();
       })
 }

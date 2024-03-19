@@ -1,5 +1,6 @@
 const User = require('../models/User');
-const passwordGenerator = require('../helpers/passwordGenerator')
+const passwordGenerator = require('../helpers/passwordGenerator');
+const logger = require('../util/logger');
 
 const getUserDetails = async(req, res)=>{
     try {
@@ -9,9 +10,11 @@ const getUserDetails = async(req, res)=>{
             delete result.password;
             return res.status(200).json(result).send();
         } else {
+            logger.error("User doesnt exist");
             return res.status(404).json().send();
         }
     } catch (error) {
+        logger.error("Cannot fetch user details")
         return res.status(400).json().send();
     }
 }
@@ -26,13 +29,15 @@ const updateUser = async(req,res) =>{
             where: { id: req.user.id }
         });
         if (updated) {
-
+            logger.info("User updated successfully")
             return res.status(204).json().end();
         } else if(!updated) {
+            logger.error("User couldnt be updated")
             res.status(404).json().send();
         }
     } catch (error) {
 
+        logger.error("Bad request")
         res.status(400).json().send();
     }
 
@@ -44,6 +49,8 @@ const addUser = async(req, res) =>{
     try {
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
+
+            logger.error("User already exists")
             return res.status(409).json().send();
         }
         const generatedPassword = await passwordGenerator(password)
@@ -55,10 +62,10 @@ const addUser = async(req, res) =>{
 
         const result = user.toJSON();
         delete result.password;
-
+        logger.info("User creation successful")
         return res.status(201).json(result).send();
     } catch (error) {
-
+        logger.error("Bad request")
         return res.status(400).json().send();
     }
 
