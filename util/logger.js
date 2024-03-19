@@ -4,20 +4,20 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json(),
-    winston.format((info, opts) => {
-      // let level = info.level.toUpperCase();
-      //   if(level === 'VERBOSE') {
-      //     level = 'DEBUG';
-      //   }
-
-      //   info['severity'] = level;
-        delete info["level"];
-        return info;
-    })(),
+    winston.format((info) => {
+      const map_values={
+        error: "ERROR",
+        warn: "WARNING",
+        info: "INFO",
+        debug: "DEBUG"
+      };
+      info.severity = map_values[info.level];
+      return info;
+    })()
   ),
   transports: [
     new winston.transports.Console({ level: 'error' }),
-    new winston.transports.File({ filename: logFilePath}),
+    new winston.transports.File({ filename: logFilePath, format: winston.format.json()}),
       ]
 });
 

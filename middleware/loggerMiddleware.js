@@ -22,7 +22,8 @@ const loggingMiddleware = async(req, res, next) =>{
 
   // Logging the incoming request
   logger.info({
-      message: 'Incoming request',
+      message: `Incoming ${req.method} request for ${req.path}`,
+      severity: 'INFO',
       method: req.method,
       path: req.path,
       body: sanitizedBody
@@ -33,19 +34,18 @@ const loggingMiddleware = async(req, res, next) =>{
       const duration = new Date() - startTime;
       const { statusCode } = res;
       let level;
-      if (statusCode >= 500) {
+      if (statusCode >= 400) {
           level = 'error';
-      } else if (statusCode >= 400) {
-          level = 'warn';
-      } else {
+      }  else {
           level = 'info';
       }
       logger.log({
           level,
           severity: map_values[level],
-          message: 'Outgoing response',
+          message: `Outgoing response for ${req.method} request path: ${req.path}`,
           method: req.method,
           path: req.path,
+          body: hideSensitiveData(res.body),
           status: statusCode,
           duration: `${duration}ms`
       });
