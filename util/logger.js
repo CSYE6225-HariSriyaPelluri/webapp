@@ -11,9 +11,10 @@ const logger = winston.createLogger({
         info: "INFO",
         debug: "DEBUG"
       };
+      info.type="webapp";
       info.severity = map_values[info.level];
       return info;
-    })()
+    })(),
   ),
   transports: [
     new winston.transports.Console({ level: 'error' }),
