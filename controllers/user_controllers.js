@@ -8,6 +8,7 @@ const getUserDetails = async(req, res)=>{
         if (req.user) {
             const result = req.user.toJSON();
             delete result.password;
+            logger.info("User details fetched");
             return res.status(200).json(result).send();
         } else {
             logger.error("User doesnt exist");
