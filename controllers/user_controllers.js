@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const passwordGenerator = require('../helpers/passwordGenerator');
 const logger = require('../util/logger');
+const publishMessageToPubSub = require('../helpers/gcpPubMsg');
+const crypto = require('crypto');
 
 const getUserDetails = async(req, res)=>{
     try {
@@ -55,14 +57,20 @@ const addUser = async(req, res) =>{
             return res.status(409).json().send();
         }
         const generatedPassword = await passwordGenerator(password)
-        
+        const verificationCode = crypto.randomBytes(6).toString('hex');
+
         const user = await User.create({
             ...req.body,
             password: generatedPassword,
+            verifyCode :verificationCode
         });
-
+        await user.save();
         const result = user.toJSON();
         delete result.password;
+        if(process.env.NODE_ENV!="test"){
+            console.log("Hi")
+            await publishMessageToPubSub(result, verificationCode);
+        }
         logger.info("User creation successful")
         return res.status(201).json(result).send();
     } catch (error) {
@@ -72,4 +80,33 @@ const addUser = async(req, res) =>{
 
 }
 
-module.exports={getUserDetails, updateUser, addUser}
+const verifyUser = async(req,res)=>{
+    const { email, token } = req.query;
+
+    try {
+
+        const user = await User.findOne({ email, verifyCode: token });
+
+        if (!user) {
+        return res.status(400).send('Invalid verification code or email.');
+        }
+
+        const expirationTime = new Date(user.createdAt);
+        expirationTime.setMinutes(expirationTime.getMinutes() + 2);
+        if (Date.now() > expirationTime) {
+        return res.status(400).send('Verification code has expired.');
+        }
+
+        // Mark the user as verified
+        user.emailVerified = true;
+        await user.save();
+
+        res.status(200).send('Verification successful. You can now access your account.');
+    } catch (error) {
+        console.error('Error verifying user:', error);
+        res.status(500).send('Error verifying user.');
+    }
+}
+
+
+module.exports={getUserDetails, updateUser, addUser, verifyUser}
