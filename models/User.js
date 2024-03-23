@@ -32,6 +32,13 @@ const User = sequelize.define('User', {
         validate: {
             isEmail: true,
         }
+    },
+    emailVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    verifyCode:{
+        type: DataTypes.STRING
     }
 }, {
     createdAt: 'account_created',
