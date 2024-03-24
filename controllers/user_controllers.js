@@ -85,7 +85,7 @@ const verifyUser = async(req,res)=>{
 
     try {
 
-        const user = await User.findOne({ email, verifyCode: token });
+        const user = await User.findOne({ where: { username: email, verifyCode: token } });
 
         if (!user) {
         return res.status(400).send('Invalid verification code or email.');
@@ -94,7 +94,17 @@ const verifyUser = async(req,res)=>{
         const expirationTime = new Date(user.createdAt);
         expirationTime.setMinutes(expirationTime.getMinutes() + 2);
         if (Date.now() > expirationTime) {
-        return res.status(400).send('Verification code has expired.');
+
+
+            const newVerificationCode = crypto.randomBytes(6).toString('hex');
+            user.verifyCode = newVerificationCode;
+            await user.save();
+            const result = user.toJSON();
+            delete result.password;
+
+            await publishMessageToPubSub(result, newVerificationCode);
+
+            return res.status(400).send('Verification code has expired. A new verification email has been sent.');
         }
 
         // Mark the user as verified
