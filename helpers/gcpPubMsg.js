@@ -4,7 +4,6 @@ const pubsub = new PubSub();
 async function publishMessageToPubSub(userData, verificationCode) {
   const data = JSON.stringify({ userData, verificationCode });
   const dataBuffer = Buffer.from(data);
-  console.log(dataBuffer)
   const topicName = 'verify_email';
 
   try {

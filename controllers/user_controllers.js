@@ -68,7 +68,6 @@ const addUser = async(req, res) =>{
         const result = user.toJSON();
         delete result.password;
         if(process.env.NODE_ENV!="test"){
-            console.log("Hi")
             await publishMessageToPubSub(result, verificationCode);
         }
         logger.info("User creation successful")
