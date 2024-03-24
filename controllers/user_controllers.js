@@ -52,7 +52,6 @@ const addUser = async(req, res) =>{
     try {
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
-
             logger.error("User already exists")
             return res.status(409).json().send();
         }
@@ -90,13 +89,14 @@ const verifyUser = async(req,res)=>{
         return res.status(400).send('Invalid verification code or email.');
         }
 
-        const expirationTime = new Date(user.createdAt);
+        const expirationTime = new Date(user.email_sent);
         expirationTime.setMinutes(expirationTime.getMinutes() + 2);
         if (Date.now() > expirationTime) {
 
 
             const newVerificationCode = crypto.randomBytes(6).toString('hex');
             user.verifyCode = newVerificationCode;
+            user.email_sent = Date.now();
             await user.save();
             const result = user.toJSON();
             delete result.password;

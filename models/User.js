@@ -39,6 +39,10 @@ const User = sequelize.define('User', {
     },
     verifyCode:{
         type: DataTypes.STRING
+    },
+    email_sent:{
+        type:DataTypes.DATE,
+        defaultValue: DataTypes.NOW
     }
 }, {
     createdAt: 'account_created',
