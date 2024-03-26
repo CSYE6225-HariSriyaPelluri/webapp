@@ -14,7 +14,7 @@ const authenticate = async(req,res,next)=>{
             if (!user) return res.status(401).json().send();
 
             const match = await bcrypt.compare(password, user.password);
-            if (match) {
+            if (match && user.emailVerified) {
                 req.user = user;
                 return next();
             }
