@@ -8,7 +8,12 @@ const EmailLog = sequelize.define('EmailLog', {
     email_sent:{
         type:DataTypes.DATE,
         defaultValue: DataTypes.NOW
-    }
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
   });
 
   module.exports=EmailLog
