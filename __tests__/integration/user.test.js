@@ -1,6 +1,8 @@
 const request = require("supertest")
 const app = require("../../index")
 const sequelize = require("../../models/index")
+const User = require("../../models/User")
+const EmailLog = require("../../models/EmailLog")
 
 describe('/v1/user Integration Tests', () => {
     const testUser = {
@@ -10,18 +12,28 @@ describe('/v1/user Integration Tests', () => {
         username: 'sriyap@gmail.com'
     };
     let basicAuthHeader;
+    let verificationCode;
 
     beforeAll( async() => {
+        await sequelize.sync({ force: true });
+        await request(app)
+            .post('/v1/user')
+            .send(testUser)
+            .expect(201);
+        
         const userCredentials = Buffer.from(`${testUser.username}:${testUser.password}`).toString('base64');
         basicAuthHeader = `Basic ${userCredentials}`;
-        await sequelize.sync({force: true})
+        const user = await User.findOne({ where: { username: testUser.username } });
+        verificationCode = user.verifyCode;
+
+        await EmailLog.create({email: user.username, email_sent: new Date()})
     });
   
     it('Test 1 - Create an account and validate it exists', async () => {
+      
       await request(app)
-        .post('/v1/user')
-        .send(testUser)
-        .expect(201);
+        .get(`/v1/user/verify?token=${verificationCode}&email=${testUser.username}`)
+        .expect(200);
   
       await request(app)
         .get('/v1/user/self')

@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const EmailLog = require('../models/EmailLog');
 const passwordGenerator = require('../helpers/passwordGenerator');
 const logger = require('../util/logger');
 const publishMessageToPubSub = require('../helpers/gcpPubMsg');
@@ -67,7 +68,7 @@ const addUser = async(req, res) =>{
         const result = user.toJSON();
         delete result.password;
         if(process.env.NODE_ENV!="test"){
-            await publishMessageToPubSub(result, verificationCode);
+            await publishMessageToPubSub(username, verificationCode);
         }
         logger.info("User creation successful")
         return res.status(201).json(result).send();
@@ -83,25 +84,26 @@ const verifyUser = async(req,res)=>{
 
     try {
 
-        const user = await User.findOne({ where: { username: email, verifyCode: token } });
+        const user = await User.findOne({ where: { username: email, verifyCode: token , emailVerified: false} });
+        const maillog = await EmailLog.findOne({where:{email}})
 
         if (!user) {
         return res.status(400).send('Invalid verification code or email.');
         }
 
-        const expirationTime = new Date(user.email_sent);
+        const expirationTime = new Date(maillog.email_sent);
         expirationTime.setMinutes(expirationTime.getMinutes() + 2);
         if (Date.now() > expirationTime) {
 
-
             const newVerificationCode = crypto.randomBytes(6).toString('hex');
             user.verifyCode = newVerificationCode;
-            user.email_sent = Date.now();
+            maillog.email_sent = Date.now();
             await user.save();
+            await maillog.save();
             const result = user.toJSON();
             delete result.password;
 
-            await publishMessageToPubSub(result, newVerificationCode);
+            await publishMessageToPubSub(email, newVerificationCode);
 
             return res.status(400).send('Verification code has expired. A new verification email has been sent.');
         }
