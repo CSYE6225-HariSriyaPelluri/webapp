@@ -18,6 +18,9 @@ const authenticate = async(req,res,next)=>{
                 req.user = user;
                 return next();
             }
+            else{
+                return res.status(403).json().send();
+            }
         } catch (error) {
             return res.status(503).json().send();
         }
