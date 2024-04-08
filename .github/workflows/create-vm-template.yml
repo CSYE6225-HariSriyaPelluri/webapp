@@ -77,23 +77,18 @@ jobs:
       - name: Configure managed instance group with new template
         run: |
           gcloud compute instance-groups managed set-instance-template $GROUP_NAME \
-            --template = webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
+            --template=projects/fabled-equator-411703/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
             --region = $REGION
 
       - name: Start rolling update for managed instance group
         run: |
           gcloud compute instance-groups managed rolling-action start-update $GROUP_NAME \
-            --version=template=webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
-            --region = $REGION
+            --version=template=projects/fabled-equator-411703/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
+            --region = $REGION \
+            --type=proactive
 
       - name: Wait for managed instance group refresh
         run: |
-          while true; do
-            if gcloud compute instance-groups managed describe $GROUP_NAME --region = $REGION --format='value(status.versionTarget.isReached)'; then
-              echo "Version target reached."
-              break
-            else
-              echo "Waiting for version target to be reached..."
-              sleep 30  # Adjust the interval as needed
-            fi
-          done
+          gcloud compute instance-groups managed wait-until $GROUP_NAME \
+          --version-target-reached \
+            --region=$REGION
