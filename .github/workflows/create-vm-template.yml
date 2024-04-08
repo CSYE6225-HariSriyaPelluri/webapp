@@ -93,6 +93,7 @@ jobs:
 
       - name: Wait for managed instance group refresh
         run: |
-          gcloud compute instance-groups managed wait-until $GROUP_NAME \
+          gcloud compute instance-groups managed wait-until \
+          $GROUP_NAME \
           --version-target-reached \
-            --region=$REGION
+          --region=$REGION
