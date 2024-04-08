@@ -22,6 +22,7 @@ jobs:
       SCOPES: https://www.googleapis.com/auth/cloud-platform
       GROUP_NAME: appserver-igm
       HOST: 10.0.2.3
+      PROJECT_ID: fabled-equator-411703
       USERNAME: webapp
       PASSWORD: Yg4Gu0GkHDyexwYm
       DATABASE: webapp
@@ -76,16 +77,19 @@ jobs:
       
       - name: Configure managed instance group with new template
         run: |
-          gcloud compute instance-groups managed set-instance-template $GROUP_NAME \
-            --template=projects/fabled-equator-411703/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
+          gcloud compute instance-groups managed set-instance-template \
+            $GROUP_NAME \
+            --template=projects/$PROJECT_ID/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
             --region=$REGION
 
       - name: Start rolling update for managed instance group
         run: |
-          gcloud compute instance-groups managed rolling-action start-update $GROUP_NAME \
-            --version=template=projects/fabled-equator-411703/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
+          gcloud compute instance-groups managed rolling-action start-update \
+            $GROUP_NAME \
+            --version=template=projects/$PROJECT_ID/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
             --region=$REGION \
             --type=proactive
+          
 
       - name: Wait for managed instance group refresh
         run: |
