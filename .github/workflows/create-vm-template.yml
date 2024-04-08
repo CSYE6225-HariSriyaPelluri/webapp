@@ -52,7 +52,7 @@ jobs:
           gcloud compute instance-templates create $INSTANCE_TEMPLATE_NAME_PREFIX-${{ steps.timestamp.outputs.timestamp }} \
             --machine-type=$MACHINE_TYPE \
             --image=$IMAGE \
-            --boot-disk-kms-key projects/$PROJECT_ID/locations/$REGION/keyRings/custom-key-ring1/cryptoKeys/vm-key \
+            --boot-disk-kms-key=projects/$PROJECT_ID/locations/$REGION/keyRings/custom-key-ring1/cryptoKeys/vm-key \
             --network-interface="network=$NETWORK,subnet=$SUBNET,network-tier=$NETWORK_TIER" \
             --tags=$TAGS \
             --region=$REGION \
