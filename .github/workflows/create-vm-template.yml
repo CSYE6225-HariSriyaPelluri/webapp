@@ -78,13 +78,13 @@ jobs:
         run: |
           gcloud compute instance-groups managed set-instance-template $GROUP_NAME \
             --template=projects/fabled-equator-411703/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
-            --region = $REGION
+            --region=$REGION
 
       - name: Start rolling update for managed instance group
         run: |
           gcloud compute instance-groups managed rolling-action start-update $GROUP_NAME \
             --version=template=projects/fabled-equator-411703/regions/$REGION/instanceTemplates/webapp-instance-template-${{ steps.timestamp.outputs.timestamp }} \
-            --region = $REGION \
+            --region=$REGION \
             --type=proactive
 
       - name: Wait for managed instance group refresh
