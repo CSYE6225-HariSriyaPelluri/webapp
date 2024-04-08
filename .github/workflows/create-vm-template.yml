@@ -15,7 +15,7 @@ jobs:
       SUBNET: ${{ secrets.SUBNET }}
       TAGS: ${{ secrets.TAGS }}
       REGION: ${{ secrets.REGION }}
-      INSTANCE_TEMPLATE_REGION: ${{ secrets.INSTANCE_TEMPLATE_REGION }}
+      INSTANCE_TEMPLATE_REGION: ${{ secrets.REGION }}
       BOOT_DISK_SIZE: ${{ secrets.BOOT_DISK_SIZE }}
       BOOT_DISK_TYPE: ${{ secrets.BOOT_DISK_TYPE }}
       SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
@@ -51,7 +51,6 @@ jobs:
         run: |
           gcloud compute instance-templates create $INSTANCE_TEMPLATE_NAME_PREFIX-${{ steps.timestamp.outputs.timestamp }} \
             --machine-type=$MACHINE_TYPE \
-            --network-tier=$NETWORK_TIER \
             --image=$IMAGE \
             --boot-disk-kms-key projects/$PROJECT_ID/locations/$REGION/keyRings/custom-key-ring1/cryptoKeys/vm-key \
             --network-interface="network=$NETWORK,subnet=$SUBNET,network-tier=$NETWORK_TIER" \
