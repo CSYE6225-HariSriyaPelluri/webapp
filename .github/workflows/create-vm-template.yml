@@ -7,26 +7,26 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      INSTANCE_TEMPLATE_NAME_PREFIX: webapp-instance-template
-      MACHINE_TYPE: e2-medium
-      NETWORK_TIER: PREMIUM
-      IMAGE: centos-image-2024-04-03-15-50-31
-      NETWORK: cloud-test-vpc-5test
-      SUBNET: webapp5test
-      TAGS: webapp-route-tag
-      REGION: us-east1
-      INSTANCE_TEMPLATE_REGION: us-east1
-      BOOT_DISK_SIZE: 100GB
-      BOOT_DISK_TYPE: pd-balanced
-      SERVICE_ACCOUNT: cloud-default-vpc-dev@fabled-equator-411703.iam.gserviceaccount.com
-      SCOPES: https://www.googleapis.com/auth/cloud-platform
-      GROUP_NAME: appserver-igm
-      HOST: 10.0.2.3
-      PROJECT_ID: fabled-equator-411703
-      USERNAME: webapp
-      PASSWORD: Yg4Gu0GkHDyexwYm
-      DATABASE: webapp
-      PORT: 8080
+      INSTANCE_TEMPLATE_NAME_PREFIX: ${{ secrets.INSTANCE_TEMPLATE_NAME_PREFIX }}
+      MACHINE_TYPE: ${{ secrets.MACHINE_TYPE }}
+      NETWORK_TIER: ${{ secrets.NETWORK_TIER }}
+      IMAGE: ${{ secrets.IMAGE }}
+      NETWORK: ${{ secrets.NETWORK }}
+      SUBNET: ${{ secrets.SUBNET }}
+      TAGS: ${{ secrets.TAGS }}
+      REGION: ${{ secrets.REGION }}
+      INSTANCE_TEMPLATE_REGION: ${{ secrets.INSTANCE_TEMPLATE_REGION }}
+      BOOT_DISK_SIZE: ${{ secrets.BOOT_DISK_SIZE }}
+      BOOT_DISK_TYPE: ${{ secrets.BOOT_DISK_TYPE }}
+      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+      SCOPES: ${{ secrets.SCOPES }}
+      GROUP_NAME: ${{ secrets.GROUP_NAME }}
+      HOST: ${{ secrets.SQL_HOST }}
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      USERNAME: ${{secrets.USERNAME}}
+      PASSWORD: ${{secrets.PASSWORD}}
+      DATABASE: ${{secrets.CLOUD_DATABASE}}
+      PORT: ${{ secrets.PORT}}
 
     steps:
       - name: Checkout code
@@ -53,6 +53,7 @@ jobs:
             --machine-type=$MACHINE_TYPE \
             --network-tier=$NETWORK_TIER \
             --image=$IMAGE \
+            --boot-disk-kms-key projects/$PROJECT_ID/locations/$REGION/keyRings/custom-key-ring1/cryptoKeys/vm-key \
             --network-interface="network=$NETWORK,subnet=$SUBNET,network-tier=$NETWORK_TIER" \
             --tags=$TAGS \
             --region=$REGION \
