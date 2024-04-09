@@ -144,6 +144,7 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ secrets.REGION }}
+          GROUP_NAME: ${{ secrets.GROUP_NAME }}
 
       - name: Start rolling update for managed instance group
         run: |
@@ -155,6 +156,7 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           REGION: ${{ secrets.REGION }}
+          GROUP_NAME: ${{ secrets.GROUP_NAME }}
 
       - name: Wait for managed instance group refresh
         run: |
