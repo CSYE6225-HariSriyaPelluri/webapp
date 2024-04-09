@@ -1,10 +1,9 @@
 name: Build and Deploy
 
-# on:
-#   push:
-#     branches:
-#       - main
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
     
 jobs:
   build-and-deploy:
@@ -132,8 +131,8 @@ jobs:
           PASSWORD: ${{secrets.PASSWORD}}
           DATABASE: ${{secrets.CLOUD_DATABASE}}
           PORT: ${{ secrets.PORT}}
-          KEY_RING_NAME: test-key-ring
-          VM_KEY: vm-key
+          KEY_RING_NAME: ${{ secrets.KEY_RING_NAME}}
+          VM_KEY: ${{ secrets.VM_KEY}}
       
       - name: Configure managed instance group with new template
         run: |
