@@ -16,4 +16,7 @@ build {
     ]
   }
 
+  provisioner "post-processor"{
+    output= "./image_manifest.json"
+  }
 }
