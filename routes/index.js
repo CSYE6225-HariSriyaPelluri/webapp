@@ -6,7 +6,7 @@ const checkParams = require('../middleware/checkParams');
 
 function routePaths(app){
   app.use('/healthz',checkParams, checkMethodType, checkBody, healthzRoute)
-  app.use('/v1/user', checkUserMethod, userRoutes)
+  app.use('/v3/user', checkUserMethod, userRoutes)
   app.use((req,res)=>{
     return res.status(404).json().send();
   })
