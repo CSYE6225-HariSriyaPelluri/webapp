@@ -4,7 +4,7 @@ const sequelize = require("../../models/index")
 const User = require("../../models/User")
 const EmailLog = require("../../models/EmailLog")
 
-describe('/v1/user Integration Tests', () => {
+describe('/v3/user Integration Tests', () => {
     const testUser = {
         first_name: 'John',
         last_name: 'Smith',
@@ -17,7 +17,7 @@ describe('/v1/user Integration Tests', () => {
     beforeAll( async() => {
         await sequelize.sync({ force: true });
         await request(app)
-            .post('/v1/user')
+            .post('/v3/user')
             .send(testUser)
             .expect(201);
         
@@ -32,11 +32,11 @@ describe('/v1/user Integration Tests', () => {
     it('Test 1 - Create an account and validate it exists', async () => {
       
       await request(app)
-        .get(`/v1/user/verify?token=${verificationCode}&email=${testUser.username}`)
+        .get(`/v3/user/verify?token=${verificationCode}&email=${testUser.username}`)
         .expect(200);
   
       await request(app)
-        .get('/v1/user/self')
+        .get('/v3/user/self')
         .set('Authorization', basicAuthHeader)
         .expect(200)
         .then((response) => {
@@ -48,13 +48,13 @@ describe('/v1/user Integration Tests', () => {
 
       const newName = 'Updated Name';
       await request(app)
-        .put('/v1/user/self')
+        .put('/v3/user/self')
         .set('Authorization', basicAuthHeader)
         .send({ first_name: newName })
         .expect(204);
   
       await request(app)
-        .get('/v1/user/self')
+        .get('/v3/user/self')
         .set('Authorization', basicAuthHeader)
         .expect(200)
         .then((response) => {
